@@ -346,15 +346,23 @@ else:
     
     with col1:
         # Probability of exceeding targets
+        st.markdown("**Enter Your Target:**")
+        
+        # Initialize target in session state if needed
+        if 'target_throughput' not in st.session_state:
+            st.session_state.target_throughput = int(baseline_results['total_throughput'])
+        
         target_input = st.number_input(
             "Target Throughput ($):",
             min_value=0,
             max_value=int(max_throughput),
+            value=st.session_state.target_throughput,
             step=100,
-            help="Enter your target throughput to calculate probability"
+            key='target_input_widget',
+            help="Enter any target value to see probability of achieving it"
         )
         
-        # Update session state when user changes it
+        # Update session state
         st.session_state.target_throughput = target_input
         
         prob_exceed = (df['throughput'] >= target_input).mean() * 100
@@ -365,7 +373,7 @@ else:
         - ✅ Probability of **achieving or exceeding**: **{prob_exceed:.1f}%**
         - ⚠️ Probability of **falling short**: **{prob_below:.1f}%**
         """)
-        
+    
         # Gauge chart
         fig_gauge = go.Figure(go.Indicator(
             mode="gauge+number",
