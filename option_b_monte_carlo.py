@@ -346,17 +346,12 @@ else:
     
     with col1:
         # Probability of exceeding targets
-        # Initialize target if not in session state
-        if 'target_throughput' not in st.session_state:
-            st.session_state.target_throughput = int(baseline_results['total_throughput'])
-        
         target_input = st.number_input(
             "Target Throughput ($):",
             min_value=0,
             max_value=int(max_throughput),
-            value=st.session_state.target_throughput,
             step=100,
-            key='target_input_widget'
+            help="Enter your target throughput to calculate probability"
         )
         
         # Update session state when user changes it
